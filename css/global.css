@@ -1,0 +1,17 @@
+.no-break{
+	white-space: nowrap;
+}
+.align-center {
+	margin: 0 auto;
+}
+.text-center {
+	text-align: center;
+}
+.hidden {
+	display: none;
+}
+.spacer50 {
+	height: 50px;
+	width: 100%;
+	display: block;
+}
