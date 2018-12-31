@@ -1,22 +1,5 @@
 <?php
-
-
-
-//If we make it this far, connect to the database
-
-$mysqli = @new mysqli('72.167.233.110', 'brrcports', 'K8j99SAhnxBP!', 'brrcports');
-
-
-
-if ($mysqli->connect_error) {
-
-	//die();
-
-	die('Connect Error: ' . $mysqli->connect_error);
-
-}
-
-
+include_once("./configs/_config.php");
 
 $lookupQuery = "
 
@@ -32,26 +15,14 @@ $lookupQuery = "
 
 $portArray = array();
 
-if ($result = $mysqli->query($lookupQuery)){
-
-
-
-
-
+if ($result = $mysqli->query($lookupQuery)) {
 	//Cycle through the results, and build up the result array
 
 	while ($line = $result->fetch_assoc()) {
-
 		$portArray[$line['id']] = $line;
-
 	}
-
-
-
 	/* free result set */
-
 	$result->free();
-
 }
 
 //else{
@@ -94,9 +65,9 @@ if ($result = $mysqli->query($lookupQuery)){
 
 
 
-		<link href="bootstrap.min.css" rel="stylesheet" />
+		<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" />
 
-		<link href="global.css" rel="stylesheet" />
+		<link href="css/global.css" rel="stylesheet" />
 
 	</head>
 
@@ -106,61 +77,59 @@ if ($result = $mysqli->query($lookupQuery)){
 
 	<?php
 
-	$header 	= '';
+$header = '';
 
-	$status 	= '';
+$status = '';
 
-	$comments 	= '';
+$comments = '';
 
-	$report 	= '';
+$report = '';
 
-	$rows		= '';
+$rows = '';
 
-	foreach($portArray as $port){
+foreach ($portArray as $port) {
 
-		$header .= '<th class="text-center no-break">Port ' . $port['id'] . '</th>';
+	$header .= '<th class="text-center no-break">Port ' . $port['id'] . '</th>';
 
-		$status .= '<td class="text-center">' . ($port['status'] == 1 ? '<span class="label label-success">Up</span>' : '<span class="label label-danger">Down</span>'). '</td>';
+	$status .= '<td class="text-center">' . ($port['status'] == 1 ? '<span class="label label-success">Up</span>' : '<span class="label label-danger">Down</span>') . '</td>';
 
-		$comments .= '<td class="text-center">' . $port['comments'] . '</td>';
+	$comments .= '<td class="text-center">' . $port['comments'] . '</td>';
 
 
 
 		//Determine if there is a pending issue report
 
-		if ($port['created_at'] === null) {
+	if ($port['created_at'] === null) {
 
-			 $reportText = '<a href="/ports/report.php?port_id=' . $port['id'] . '">Report</a>';
+		$reportText = '<a href="/ports/report.php?port_id=' . $port['id'] . '&type=report">Report</a>';
 
-		}
+	} else {
 
-		else{
-
-			$reportText = '<span>Reported on ' . date('Y/m/d', strtotime($port['created_at'])) .  '</span>';
-
-		}
-
-
-
-		$report .= '<td class="text-center">' . $reportText . '</td>';
-
-
-
-		$rows .= '<tr>';
-
-		$rows .= '<th class="no-break">Port ' . $port['id'] . '</th>';
-
-		$rows .= '<td class="text-center">' . ($port['status'] == 1 ? '<span class="label label-success">Up</span>' : '<span class="label label-danger">Down</span>') . '</td>';
-
-		$rows .= '<td>' .  $port['comments'] . '</td>';
-
-		$rows .= '<td>' . $reportText . '</td>';
-
-		$rows .= '</tr>';
+		$reportText = '<span>Reported on ' . date('Y/m/d', strtotime($port['created_at'])) . '</span>';
 
 	}
 
-	?>
+
+
+	$report .= '<td class="text-center">' . $reportText . '</td>';
+
+
+
+	$rows .= '<tr>';
+
+	$rows .= '<th class="no-break">Port ' . $port['id'] . '</th>';
+
+	$rows .= '<td class="text-center">' . ($port['status'] == 1 ? '<span class="label label-success">Up</span>' : '<span class="label label-danger">Down</span>') . '</td>';
+
+	$rows .= '<td>' . $port['comments'] . '</td>';
+
+	$rows .= '<td>' . $reportText . '</td>';
+
+	$rows .= '</tr>';
+
+}
+
+?>
 
 	<div class="container">
 

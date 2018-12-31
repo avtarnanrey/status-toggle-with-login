@@ -1,24 +1,6 @@
 <?php
 
-
-
-//If we make it this far, connect to the database
-
-$mysqli = @new mysqli('72.167.233.110', 'brrcports', 'K8j99SAhnxBP!', 'brrcports');
-
-
-
-if ($mysqli->connect_error) {
-
-	//die();
-
-	die('Connect Error: ' . $mysqli->connect_error);
-
-}
-
-
-
-//Now output the doc format for the page:
+include("./configs/_config.php");
 
 ?>
 
@@ -47,10 +29,8 @@ if ($mysqli->connect_error) {
 
 
 		<title>BRRC Port Status - Report a Problem</title>
-
-
-
-		<link href="bootstrap.min.css" rel="stylesheet" />
+		<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
 
 	</head>
 
@@ -62,17 +42,17 @@ if ($mysqli->connect_error) {
 
 	<?php
 
-	$portId = isset($_GET['port_id']) && is_numeric($_GET['port_id']) && $_GET['port_id'] > 0 && $_GET['port_id'] < 12 ? $_GET['port_id'] : null;
+$portId = isset($_GET['port_id']) && is_numeric($_GET['port_id']) && $_GET['port_id'] > 0 && $_GET['port_id'] < 12 ? $_GET['port_id'] : null;
 
 
 
 	//If someone is fucking with us, get out of here
 
-	if ($portId === null) redirect('/index.php');
+if ($portId === null) redirect('/index.php');
 
 
 
-	?>
+?>
 
 	<div class="container">
 
@@ -146,67 +126,53 @@ if ($mysqli->connect_error) {
 
 <?php
 
-function redirect($uri = '', $method = 'auto', $code = NULL)
+function redirect($uri = '', $method = 'auto', $code = null)
 
 {
 
 	// IIS environment likely? Use 'refresh' for better compatibility
 
-	if ($method === 'auto' && isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== FALSE)
+    if ($method === 'auto' && isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false) {
 
-	{
+        $method = 'refresh';
 
-		$method = 'refresh';
+    } elseif ($method !== 'refresh' && (empty($code) or !is_numeric($code))) {
 
-	}
+        if (isset($_SERVER['SERVER_PROTOCOL'], $_SERVER['REQUEST_METHOD']) && $_SERVER['SERVER_PROTOCOL'] === 'HTTP/1.1') {
 
-	elseif ($method !== 'refresh' && (empty($code) OR ! is_numeric($code)))
+            $code = ($_SERVER['REQUEST_METHOD'] !== 'GET')
 
-	{
+                ? 303	// reference: http://en.wikipedia.org/wiki/Post/Redirect/Get
 
-		if (isset($_SERVER['SERVER_PROTOCOL'], $_SERVER['REQUEST_METHOD']) && $_SERVER['SERVER_PROTOCOL'] === 'HTTP/1.1')
+            : 307;
 
-		{
+        } else {
 
-			$code = ($_SERVER['REQUEST_METHOD'] !== 'GET')
+            $code = 302;
 
-				? 303	// reference: http://en.wikipedia.org/wiki/Post/Redirect/Get
+        }
 
-				: 307;
-
-		}
-
-		else
-
-		{
-
-			$code = 302;
-
-		}
-
-	}
+    }
 
 
 
-	switch ($method)
+    switch ($method) {
 
-	{
+        case 'refresh':
 
-		case 'refresh':
+            header('Refresh:0;url=' . $uri);
 
-			header('Refresh:0;url='.$uri);
+            break;
 
-			break;
+        default:
 
-		default:
+            header('Location: ' . $uri, true, $code);
 
-			header('Location: '.$uri, TRUE, $code);
+            break;
 
-			break;
+    }
 
-	}
-
-	exit;
+    exit;
 
 }
 

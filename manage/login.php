@@ -1,3 +1,9 @@
+<?php
+session_start();
+if (isset($_SESSION['membership']) || !empty($_SESSION['membership'])) {
+    header('Location: home.php');
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,6 +11,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="robots" content="noindex,nofollow" />
     <title>BRRC Ports Dashboard - Login</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
         crossorigin="anonymous">
@@ -20,20 +27,21 @@
             <div class="spacer50"></div>
         </div>
         <div class="col-xs-12 col-sm-8 col-md-4 align-center">
+            <div id="login-error" class="alert alert-danger hidden">
+                <strong>Sorry!</strong> Username of password combination is wrong.
+            </div>
+            <div id="username-password-error" class="alert alert-warning hidden">
+                Username or password field is empty!.
+            </div>
+            <br>
             <form action="" method="post" id="loginForm">
                 <div class="form-group">
                     <label for="username">Username</label>
-                    <input type="email" class="form-control" name="username" id="username" aria-describedby="username" placeholder="Enter username">
-                    <div class="invalid-username hidden" id="invalid-username">
-                        Please enter a username.
-                    </div>
+                    <input type="text" class="form-control" name="username" id="username" aria-describedby="username" placeholder="Enter username">
                 </div>
                 <div class="form-group">
                     <label for="password">Password</label>
                     <input type="password" name="password" class="form-control" id="password" placeholder="Password">
-                    <div class="invalid-password hidden" id="invalid-password">
-                        Please enter an password.
-                    </div>
                 </div>
                 <button type="submit" id="login" class="btn btn-primary">Login</button>
             </form>

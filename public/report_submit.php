@@ -1,30 +1,6 @@
 <?php
-
-
-
-//If we make it this far, connect to the database
-
-$mysqli = @new mysqli('72.167.233.110', 'brrcports', 'K8j99SAhnxBP!', 'brrcports');
-
-
-
-if ($mysqli->connect_error) {
-
-	//die();
-
-	die('Connect Error: ' . $mysqli->connect_error);
-
-}
-
-
-
-//Now output the doc format for the page:
-
+include("../../configs/_config.php");
 ?>
-
-
-
-
 
 <!DOCTYPE html>
 
@@ -72,23 +48,23 @@ if ($mysqli->connect_error) {
 
 
 
-$portId 		= $_POST['port_id'];
+$portId = $_POST['port_id'];
 
-$portDown 		= $_POST['port_down'];
+$portDown = $_POST['port_down'];
 
-$name 			= $_POST['name'];
+$name = $_POST['name'];
 
-$description	= $_POST['description'];
-
-
+$description = $_POST['description'];
 
 
 
-if ($portDown == 1){
+
+
+if ($portDown == 1) {
 
 //Update the status of the port
 
-$sql = "UPDATE ports p SET status = 0 WHERE p.id = ?;";
+	$sql = "UPDATE ports p SET status = 0 WHERE p.id = ?;";
 
 
 
@@ -159,7 +135,7 @@ $insertStmt->close();
 
 //Send mail
 
-$to      = 'eaperry@rogers.com';
+$to = 'eaperry@rogers.com';
 
 $subject = "Port #$portId report";
 
@@ -167,9 +143,9 @@ $message = "Port #$portId needs attention\n $description";
 
 $headers = 'From: ports@rangeburlington.ca' . "\r\n" .
 
-    'Reply-To: noreply@rangeburlington.ca' . "\r\n" .
+	'Reply-To: noreply@rangeburlington.ca' . "\r\n" .
 
-    'X-Mailer: PHP/' . phpversion();
+	'X-Mailer: PHP/' . phpversion();
 
 
 
@@ -201,39 +177,27 @@ mail($to, $subject, $message, $headers);
 
 <?php
 
-function redirect($uri = '', $method = 'auto', $code = NULL)
+function redirect($uri = '', $method = 'auto', $code = null)
 
 {
 
 	// IIS environment likely? Use 'refresh' for better compatibility
 
-	if ($method === 'auto' && isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== FALSE)
-
-	{
+	if ($method === 'auto' && isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false) {
 
 		$method = 'refresh';
 
-	}
+	} elseif ($method !== 'refresh' && (empty($code) or !is_numeric($code))) {
 
-	elseif ($method !== 'refresh' && (empty($code) OR ! is_numeric($code)))
-
-	{
-
-		if (isset($_SERVER['SERVER_PROTOCOL'], $_SERVER['REQUEST_METHOD']) && $_SERVER['SERVER_PROTOCOL'] === 'HTTP/1.1')
-
-		{
+		if (isset($_SERVER['SERVER_PROTOCOL'], $_SERVER['REQUEST_METHOD']) && $_SERVER['SERVER_PROTOCOL'] === 'HTTP/1.1') {
 
 			$code = ($_SERVER['REQUEST_METHOD'] !== 'GET')
 
 				? 303	// reference: http://en.wikipedia.org/wiki/Post/Redirect/Get
 
-				: 307;
+			: 307;
 
-		}
-
-		else
-
-		{
+		} else {
 
 			$code = 302;
 
@@ -243,19 +207,17 @@ function redirect($uri = '', $method = 'auto', $code = NULL)
 
 
 
-	switch ($method)
-
-	{
+	switch ($method) {
 
 		case 'refresh':
 
-			header('Refresh:0;url='.$uri);
+			header('Refresh:0;url=' . $uri);
 
 			break;
 
 		default:
 
-			header('Location: '.$uri, TRUE, $code);
+			header('Location: ' . $uri, true, $code);
 
 			break;
 
