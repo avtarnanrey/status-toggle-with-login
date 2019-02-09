@@ -1,13 +1,4 @@
-<?php
-
-include("./configs/_config.php");
-
-?>
-
-
-
-
-
+<?php include("../configs/_config.php"); ?>
 <!DOCTYPE html>
 
 <html lang="en">
@@ -29,8 +20,7 @@ include("./configs/_config.php");
 
 
 		<title>BRRC Port Status - Report a Problem</title>
-		<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
-        crossorigin="anonymous">
+		<link href="../css/bootstrap-custom.min.css" rel="stylesheet" >
 
 	</head>
 
@@ -62,7 +52,7 @@ if ($portId === null) redirect('/index.php');
 
 		<hr />
 
-		<form method="post" action="/ports/report_submit.php">
+		<form method="post" action="report_submit.php">
 
 			<div class="form-group">
 
@@ -132,47 +122,47 @@ function redirect($uri = '', $method = 'auto', $code = null)
 
 	// IIS environment likely? Use 'refresh' for better compatibility
 
-    if ($method === 'auto' && isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false) {
+	if ($method === 'auto' && isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false) {
 
-        $method = 'refresh';
+		$method = 'refresh';
 
-    } elseif ($method !== 'refresh' && (empty($code) or !is_numeric($code))) {
+	} elseif ($method !== 'refresh' && (empty($code) or !is_numeric($code))) {
 
-        if (isset($_SERVER['SERVER_PROTOCOL'], $_SERVER['REQUEST_METHOD']) && $_SERVER['SERVER_PROTOCOL'] === 'HTTP/1.1') {
+		if (isset($_SERVER['SERVER_PROTOCOL'], $_SERVER['REQUEST_METHOD']) && $_SERVER['SERVER_PROTOCOL'] === 'HTTP/1.1') {
 
-            $code = ($_SERVER['REQUEST_METHOD'] !== 'GET')
+			$code = ($_SERVER['REQUEST_METHOD'] !== 'GET')
 
-                ? 303	// reference: http://en.wikipedia.org/wiki/Post/Redirect/Get
+				? 303	// reference: http://en.wikipedia.org/wiki/Post/Redirect/Get
 
-            : 307;
+			: 307;
 
-        } else {
+		} else {
 
-            $code = 302;
+			$code = 302;
 
-        }
+		}
 
-    }
+	}
 
 
 
-    switch ($method) {
+	switch ($method) {
 
-        case 'refresh':
+		case 'refresh':
 
-            header('Refresh:0;url=' . $uri);
+			header('Refresh:0;url=' . $uri);
 
-            break;
+			break;
 
-        default:
+		default:
 
-            header('Location: ' . $uri, true, $code);
+			header('Location: ' . $uri, true, $code);
 
-            break;
+			break;
 
-    }
+	}
 
-    exit;
+	exit;
 
 }
 

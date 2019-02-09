@@ -32,8 +32,10 @@
             e.preventDefault();
             // Validate
             var portId = this.dataset.port;
+            var reportId = this.dataset.report;
             var formData = new FormData();
             formData.append("portId", portId);
+            formData.append("reportId", reportId);
             if (portId <= 12) {
                 updateRequest(formData);
             }

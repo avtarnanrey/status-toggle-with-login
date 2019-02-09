@@ -1,13 +1,13 @@
 <?php
-include_once("./configs/_config.php");
+include_once("../configs/_config.php");
 
 $lookupQuery = "
 
-	SELECT p.*, r.created_at, r.name
+	SELECT p.*, r.created_at, r.name, r.comment
 
 	FROM ports p
 
-	LEFT JOIN reports r ON r.port_id = p.id AND r.status = 'pending'
+	LEFT JOIN reports r ON r.port_id = p.id AND r.report_status = 'pending'
 
 	ORDER BY p.id ASC;";
 
@@ -65,9 +65,9 @@ if ($result = $mysqli->query($lookupQuery)) {
 
 
 
-		<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" />
+		<link href="../css/bootstrap-custom.min.css" rel="stylesheet" />
 
-		<link href="css/global.css" rel="stylesheet" />
+		<link href="../css/global.css" rel="stylesheet" />
 
 	</head>
 
@@ -93,15 +93,15 @@ foreach ($portArray as $port) {
 
 	$status .= '<td class="text-center">' . ($port['status'] == 1 ? '<span class="label label-success">Up</span>' : '<span class="label label-danger">Down</span>') . '</td>';
 
-	$comments .= '<td class="text-center">' . $port['comments'] . '</td>';
+	$comments .= '<td class="text-center">' . ($port['status'] == 0 ? $port['comment'] : '') . '</td>';
 
 
 
 		//Determine if there is a pending issue report
 
-	if ($port['created_at'] === null) {
+	if ($port['status'] == 1) {
 
-		$reportText = '<a href="/ports/report.php?port_id=' . $port['id'] . '&type=report">Report</a>';
+		$reportText = '<a href="report.php?port_id=' . $port['id'] . '&type=report">Report</a>';
 
 	} else {
 
@@ -121,7 +121,7 @@ foreach ($portArray as $port) {
 
 	$rows .= '<td class="text-center">' . ($port['status'] == 1 ? '<span class="label label-success">Up</span>' : '<span class="label label-danger">Down</span>') . '</td>';
 
-	$rows .= '<td>' . $port['comments'] . '</td>';
+	$rows .= '<td>' . $port['comment'] . '</td>';
 
 	$rows .= '<td>' . $reportText . '</td>';
 

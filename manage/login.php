@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (isset($_SESSION['membership']) || !empty($_SESSION['membership'])) {
-    header('Location: home.php');
+    header('Location: index.php');
 }
 ?>
 <!DOCTYPE html>
@@ -13,24 +13,23 @@ if (isset($_SESSION['membership']) || !empty($_SESSION['membership'])) {
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="robots" content="noindex,nofollow" />
     <title>BRRC Ports Dashboard - Login</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
-        crossorigin="anonymous">
-    <link href="css/global.css" rel="stylesheet">
+    <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
+    <link href="../css/global.css" rel="stylesheet">
 </head>
 
 <body>
     <div class="container">
         <div class="text-center">
             <div class="spacer50"></div>
-            <img src="img/logo.gif" alt="BRRC Logo" />
+            <img src="../img/logo.gif" alt="BRRC Logo" />
             <h4>BRRC Ports Management</h4>
             <div class="spacer50"></div>
         </div>
         <div class="col-xs-12 col-sm-8 col-md-4 align-center">
-            <div id="login-error" class="alert alert-danger hidden">
+            <div id="login-error" class="alert alert-danger" style="display: none">
                 <strong>Sorry!</strong> Username of password combination is wrong.
             </div>
-            <div id="username-password-error" class="alert alert-warning hidden">
+            <div id="username-password-error" class="alert alert-warning" style="display: none">
                 Username or password field is empty!.
             </div>
             <br>
@@ -47,7 +46,7 @@ if (isset($_SESSION['membership']) || !empty($_SESSION['membership'])) {
             </form>
         </div>
     </div>
-    <script src="js/login.js" type="text/javascript"></script>
+    <script src="../js/login.js" type="text/javascript"></script>
 </body>
 
 </html>

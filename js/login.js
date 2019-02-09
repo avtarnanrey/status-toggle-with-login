@@ -14,7 +14,7 @@
         }
         ).then((response) => response.text())
             .then(data => {
-                (data === "1") ? window.location.replace("home.php") : loginError.classList.remove("hidden");
+                (data === "1") ? window.location.replace("index.php") : loginError.style.display = "block";
             })
             .catch((reason) => {
                 console.log(reason);
@@ -40,4 +40,11 @@
             }
         }
     });
+
+    // Reset Errors
+    username.addEventListener('keyup', function () {
+        usernamePasswordError.style.display = "none";
+        loginError.style.display = "none";
+        $error = [];
+    })
 })();

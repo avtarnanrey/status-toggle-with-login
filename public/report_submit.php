@@ -1,5 +1,5 @@
 <?php
-include("../../configs/_config.php");
+include("../configs/_config.php");
 ?>
 
 <!DOCTYPE html>
@@ -26,7 +26,7 @@ include("../../configs/_config.php");
 
 
 
-	<link href="bootstrap.min.css" rel="stylesheet" />
+	<link href="../css/bootstrap-custom.min.css" rel="stylesheet" />
 
 </head>
 
@@ -101,7 +101,7 @@ if ($portDown == 1) {
 
 //Submit the report
 
-$insertSQL = "INSERT INTO reports (port_id, name, comment, reported_port_status) VALUES (?, ?, ?, ?);";
+$insertSQL = "INSERT INTO reports (port_id, name, comment, report_status) VALUES (?, ?, ?, ?);";
 
 
 
@@ -163,7 +163,7 @@ mail($to, $subject, $message, $headers);
 
 	<hr />
 
-	<p><a href="/index.php">Back to Status Board</a></p>
+	<p><a href="index.php">Back to Status Board</a></p>
 
 
 

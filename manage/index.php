@@ -1,5 +1,5 @@
 <?php
-include("./configs/_config.php");
+include("../configs/_config.php");
 session_start();
 if (!isset($_SESSION['membership']) || empty($_SESSION['membership'])) {
     header('Location: login.php');
@@ -14,34 +14,43 @@ if (!isset($_SESSION['membership']) || empty($_SESSION['membership'])) {
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="robots" content="nofollow, noindex" />
     <title>Dashboard - BRRC Ports Status</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
-        crossorigin="anonymous">
-    <link href="css/global.css" rel="stylesheet">
+    <link href="../css/bootstrap-custom.min.css" rel="stylesheet" >
+    <link href="../css/global.css" rel="stylesheet">
 </head>
 
 <body>
     <div class="header container">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light d-flex justify-content-between">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#brrcPortNav" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
             <a class="navbar-brand" href="#">BRRC Port Status</a>
-
-            <div class="" id="navbarSupportedContent">
-                <div class="form-inline my-2 my-lg-0">
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item active">
-                            <a class="nav-link" href="home.php">Update Status
-                                <span class="sr-only">(current)</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="current.php">Current Status</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="logout.php">Logout</a>
-                        </li>
-                    </ul>
-                </div>
             </div>
-        </nav>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="brrcPortNav">
+            <ul class="nav navbar-nav navbar-right">
+                <li class="nav-item active">
+                    <a class="nav-link" href="index.php">Update Status
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="reports.php">Reports</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="logout.php">Logout</a>
+                </li>
+            </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
     </div>
     <div class="container">
     <?php
@@ -89,21 +98,21 @@ foreach ($portArray as $port) {
     $status .= '<td class="text-center">' . ($port['status'] == 1 ? '<span class="label label-success">Up</span>' : '<span class="label label-danger">Down</span>') . '</td>';
 
     if ($port['status'] == 0) {
-        $statusQuery = "SELECT comment, created_at FROM reports WHERE port_id = " . $port['id'];
+        $statusQuery = "SELECT id, comment, created_at FROM reports WHERE port_id = " . $port['id'] . " ORDER BY `id` DESC LIMIT 1";
         if ($result = $mysqli->query($statusQuery)) {
             while ($line = $result->fetch_assoc()) {
-                $comments .= '<td class="text-center">' . $line['comment'] . '</td>';
-                $reportText = '<span>Reported on ' . date('Y/m/d', strtotime($line['created_at'])) . '</span>';
+                $comments = '<span class="text-center">' . $line['comment'] . '</span>';
+                $reportDate = '<span>Reported on ' . date('Y/m/d', strtotime($line['created_at'])) . '</span>';
+                $updateText = '<button class="btn btn-primary" id="updatePort" data-port="' . $port['id'] . '" data-report="' . $line['id'] . '">Update</button>';
             }
         }
-        $updateText = '<button class="btn btn-primary" id="updatePort" data-port="' . $port['id'] . '">Update</button>';
     } else {
         $comments = "";
-        $reportText = "";
+        $reportDate = "";
         $updateText = "";
     }
 
-    $report .= '<td class="text-center">' . $reportText . '</td>';
+    $report .= '<td class="text-center">' . $reportDate . '</td>';
 
     $rows .= '<tr>';
 
@@ -111,9 +120,9 @@ foreach ($portArray as $port) {
 
     $rows .= '<td class="text-center">' . ($port['status'] == 1 ? '<span class="label label-success">Up</span>' : '<span class="label label-danger">Down</span>') . '</td>';
 
-    $rows .= '<td>' . $port['comments'] . '</td>';
+    $rows .= '<td>' . $comments . '</td>';
 
-    $rows .= '<td>' . $reportText . '</td>';
+    $rows .= '<td>' . $reportDate . '</td>';
 
     $rows .= '<td>' . $updateText . '</td>';
 
@@ -167,7 +176,7 @@ foreach ($portArray as $port) {
 $mysqli->close();
 
 ?>
-<script src="js/update.js" type="text/javascript"></script>
+<script src="../js/update.js" type="text/javascript"></script>
 </body>
 
 </html>

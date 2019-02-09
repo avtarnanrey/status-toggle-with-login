@@ -1,12 +1,8 @@
 <?php
 
-include("./configs/_config.php");
+include("../configs/_config.php");
 
 ?>
-
-
-
-
 
 <!DOCTYPE html>
 
@@ -29,8 +25,7 @@ include("./configs/_config.php");
 
 
 		<title>BRRC Port Status - Report a Problem</title>
-		<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
-        crossorigin="anonymous">
+		<link href="../css/bootstrap-custom.min.css" rel="stylesheet" >
 
 	</head>
 
@@ -62,7 +57,7 @@ if ($portId === null) redirect('/index.php');
 
 		<hr />
 
-		<form method="post" action="/ports/report_submit.php">
+		<form method="post" action="report_submit.php">
 
 			<div class="form-group">
 
