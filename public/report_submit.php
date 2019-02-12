@@ -135,7 +135,8 @@ $insertStmt->close();
 
 //Send mail
 
-$to = 'eaperry@rogers.com';
+//$to = 'eaperry@rogers.com';
+$to = 'avtar@avtarnanrey.com, ianp@pistol-ontario.ca';
 
 $subject = "Port #$portId report";
 
